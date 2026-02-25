@@ -1,0 +1,11 @@
+build/
+*.bin
+*.iso
+*.img
+*.d
+
+.vscode/
+.DS_Store
+*.swp
+*.log
+.docker/
