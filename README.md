@@ -35,7 +35,8 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [x] Project & Docker Setup
     - [x] Bootloader, Linker & Kernel Handover
     - [x] Bash Scripts
-    - [ ] VGA Text Mode Driver
+    - [x] VGA Text Mode Driver
+    - [x] Printing
     - [ ] GDT Setup
     - [ ] Setup IDT & ISRs
     - [ ] Remap PIC & IRQs
