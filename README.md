@@ -37,7 +37,7 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [x] Bash Scripts
     - [x] VGA Text Mode Driver
     - [x] Printing
-    - [ ] GDT Setup
+    - [x] GDT Setup
     - [ ] Setup IDT & ISRs
     - [ ] Remap PIC & IRQs
 - [ ] Memory Management
