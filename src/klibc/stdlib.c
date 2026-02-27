@@ -12,7 +12,7 @@ static void reverse(char* str, int length) {
     }
 }
 
-char* itoa(int value, char* str, int base) {
+const char* itoa(int32_t value, char* str, int32_t base) {
     int i = 0;
     int isNegative = 0;
 
@@ -43,7 +43,7 @@ char* itoa(int value, char* str, int base) {
     return str;
 }
 
-char* utoa(unsigned int value, char* str, int base) {
+const char* utoa(uint32_t value, char* str, int32_t base) {
     int i = 0;
 
     if (value == 0) {

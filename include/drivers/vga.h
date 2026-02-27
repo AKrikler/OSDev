@@ -3,13 +3,6 @@
 
 #include <klibc/types.h>
 
-/** @brief Standard VGA text mode width. */
-#define VGA_WIDTH 80
-/** @brief Standard VGA text mode height. */
-#define VGA_HEIGHT 25
-/** @brief Physical memory address of the VGA text buffer. */
-#define VGA_BUFFER_ADDR 0xB8000
-
 /**
  * @brief VGA Color Palette.
  * * A VGA attribute byte consists of:

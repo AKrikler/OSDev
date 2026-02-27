@@ -11,7 +11,7 @@
  * @param base  The numerical base.
  * @return      A pointer to the resulting string.
  */
-char* itoa(int value, char* str, int base);
+const char* itoa(int32_t value, char* str, int32_t base);
 
 /**
  * @brief Converts an unsigned integer to a string based on the provided base.
@@ -21,6 +21,6 @@ char* itoa(int value, char* str, int base);
  * @param base  The numerical base.
  * @return      A pointer to the resulting string.
  */
-char* utoa(unsigned int value, char* str, int base);
+const char* utoa(uint32_t value, char* str, int32_t base);
 
 #endif

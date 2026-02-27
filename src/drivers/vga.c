@@ -1,5 +1,7 @@
 #include <drivers/vga.h>
 
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
 #define VGA_ADDRESS 0xB8000
 
 static uint16_t* const vga_buffer = (uint16_t*)VGA_ADDRESS;
