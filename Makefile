@@ -14,7 +14,14 @@ OBJS += $(SRCS_ASM:src/%.asm=build/%.o)
 
 DEPS = $(OBJS:.o=.d)
 
-all: build/os.bin
+all: os.iso
+
+os.iso: build/os.bin
+	@mkdir -p isodir/boot/grub
+	@cp build/os.bin isodir/boot/os.bin
+	@echo 'menuentry "KriklerOS" { multiboot /boot/os.bin }' > isodir/boot/grub/grub.cfg
+	grub-mkrescue -o os.iso isodir
+	@rm -rf isodir
 
 build/os.bin: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS)
@@ -28,6 +35,9 @@ build/%.o: src/%.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
 -include $(DEPS)
+
+run: os.iso
+	qemu-system-i386 -cdrom os.iso
 
 clean:
 	rm -rf build
