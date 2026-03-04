@@ -1,7 +1,7 @@
 #ifndef STDIO_H
 #define STDIO_H
 
-#include <klibc/types.h>
+#include <klibc/stddef.h>
 #include <klibc/stdarg.h>
 
 /**

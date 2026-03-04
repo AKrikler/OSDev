@@ -1,7 +1,7 @@
 #ifndef STDLIB_H
 #define STDLIB_H
 
-#include <klibc/types.h>
+#include <klibc/stdint.h>
 
 /**
  * @brief Converts an integer to a string based on the provided base.

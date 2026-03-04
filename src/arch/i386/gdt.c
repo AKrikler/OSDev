@@ -1,47 +1,45 @@
 #include <arch/i386/gdt.h>
-
-#include <klibc/types.h>
+#include <klibc/stdbool.h>
+#include <klibc/stdint.h>
 
 extern void gdt_flush(uint32_t);
 
-static uint64_t create_entry(uint32_t base, uint32_t limit, uint8_t selector_type, uint8_t is_system_type, uint8_t DPL, uint8_t present, uint8_t available, uint8_t long_mode, uint8_t misc, uint8_t gran)
+typedef struct GDT_ENTRY
 {
-    uint64_t entry = 0;
+    uint16_t limit_low;
+    uint16_t base_low;
+    uint8_t  base_mid;
+    uint8_t  access;
+    uint8_t  flags;
+    uint8_t  base_high;
+} __attribute__((packed)) gdt_entry_t;
 
-    entry |= (uint64_t)(limit & 0xFFFF);                // 0-15: Limit Low
-    entry |= (uint64_t)((limit >> 16) & 0x0F) << 48;    // 48-51: Limit High
-
-    entry |= (uint64_t)(base & 0xFFFF) << 16;           // 16-31: Base Low
-    entry |= (uint64_t)((base >> 16) & 0xFF) << 32;     // 32-39: Base Middle
-    entry |= (uint64_t)((base >> 24) & 0xFF) << 56;     // 56-63: Base High
-
-    uint8_t access = (present & 0x01) << 7;
-    access |= (DPL & 0x03) << 5;
-    access |= (is_system_type & 0x01) << 4;
-    access |= (selector_type & 0x0F);
-    entry |= (uint64_t)access << 40;                    // 40-47: Access Byte [Present(1) | DPL(2) | S(1) | Type(4)]
-
-    uint8_t flags = (gran & 0x01) << 7;
-    flags |= (misc & 0x01) << 6;
-    flags |= (long_mode & 0x01) << 5;
-    flags |= (available & 0x01) << 4;
-    entry |= (uint64_t)flags << 48;                     // 52-55: Flags/Gran [Gran(1) | Size/Misc(1) | Long(1) | Avl(1)]
-
-    return entry;
+static gdt_entry_t create_entry(uint32_t limit, uint32_t base, uint8_t present, uint8_t DPL, uint8_t descriptor_type, bool executable, uint8_t DC, bool RW, bool accessed, bool gran, bool DB, bool long_mode)
+{
+    return (gdt_entry_t)
+	{
+        (uint16_t)(limit & 0xFFFF),
+        (uint16_t)(base & 0xFFFF),
+        (uint8_t)((base >> 16) & 0xFF),
+        (uint8_t)((present << 7) | (DPL << 5) | (descriptor_type << 4) | (executable << 3) | (DC << 2) | (RW << 1) | accessed),
+        (uint8_t)((gran << 7) | (DB << 6) | (long_mode << 5) | ((limit >> 16) & 0x0F)),
+		(uint8_t)((base >> 24) & 0xFF),
+    };
 }
 
 void gdt_init(void)
 {
-    static uint64_t gdt[5];
+	static gdt_entry_t gdt[5];
 
-    gdt[0] = create_entry(0, 0, 0, 0, 0, 0, 0,0, 0, 0);             // Null
-    gdt[1] = create_entry(0, 0xFFFFF, 0x0A, 1, 0, 1, 0, 0, 1, 1);   // K-Code
-    gdt[2] = create_entry(0, 0xFFFFF, 0x02, 1, 0, 1, 0, 0, 1, 1);   // K-Data
-    gdt[3] = create_entry(0, 0xFFFFF, 0x0A, 1, 3, 1, 0, 0, 1, 1);   // U-Code
-    gdt[4] = create_entry(0, 0xFFFFF, 0x02, 1, 3, 1, 0, 0, 1, 1);   // U-Data
+	gdt[0] = create_entry(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);								// Null
+	gdt[1] = create_entry(0xFFFFF, 0, 1, 0, 1, true,  0, true, false, true, true, false);	// K-Code
+	gdt[2] = create_entry(0xFFFFF, 0, 1, 0, 1, false, 0, true, false, true, true, false);	// K-Data
+	gdt[3] = create_entry(0xFFFFF, 0, 1, 3, 1, true,  0, true, false, true, true, false);	// U-Code
+	gdt[4] = create_entry(0xFFFFF, 0, 1, 3, 1, false, 0, true, false, true, true, false);	// U-Data
 
-    gdt_flush((uint32_t)&(struct { uint16_t limit; uint32_t base; } __attribute__((packed))){
-        (uint16_t)(sizeof(gdt) - 1), 
+	gdt_flush((uint32_t)&(struct { uint16_t limit; uint32_t base; } __attribute__((packed)))
+	{
+    	(uint16_t)(sizeof(gdt) - 1), 
         (uint32_t)&gdt
     });
 }

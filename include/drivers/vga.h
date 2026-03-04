@@ -1,7 +1,7 @@
 #ifndef VGA_H
 #define VGA_H
 
-#include <klibc/types.h>
+#include <klibc/stdint.h>
 
 /**
  * @brief VGA Color Palette.

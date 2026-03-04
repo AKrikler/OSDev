@@ -1,9 +1,11 @@
 #include <klibc/stdlib.h>
 
-static void reverse(char* str, int length) {
+static void reverse(char* str, int length)
+{
     int start = 0;
     int end = length - 1;
-    while (start < end) {
+    while (start < end)
+	{
         char temp = str[start];
         str[start] = str[end];
         str[end] = temp;
@@ -12,28 +14,33 @@ static void reverse(char* str, int length) {
     }
 }
 
-const char* itoa(int32_t value, char* str, int32_t base) {
+const char* itoa(int32_t value, char* str, int32_t base)
+{
     int i = 0;
     int isNegative = 0;
 
-    if (value == 0) {
+    if (value == 0)
+	{
         str[i++] = '0';
         str[i] = '\0';
         return str;
     }
 
-    if (value < 0 && base == 10) {
+    if (value < 0 && base == 10)
+	{
         isNegative = 1;
         value = -value;
     }
 
-    while (value != 0) {
+    while (value != 0)
+	{
         int rem = value % base;
         str[i++] = (rem > 9) ? (rem - 10) + 'A' : rem + '0';
         value = value / base;
     }
 
-    if (isNegative) {
+    if (isNegative)
+	{
         str[i++] = '-';
     }
 
@@ -43,16 +50,19 @@ const char* itoa(int32_t value, char* str, int32_t base) {
     return str;
 }
 
-const char* utoa(uint32_t value, char* str, int32_t base) {
+const char* utoa(uint32_t value, char* str, int32_t base)
+{
     int i = 0;
 
-    if (value == 0) {
+    if (value == 0)
+	{
         str[i++] = '0';
         str[i] = '\0';
         return str;
     }
 
-    while (value != 0) {
+    while (value != 0)
+	{
         unsigned int rem = value % base;
         str[i++] = (rem > 9) ? (rem - 10) + 'A' : rem + '0';
         value = value / base;

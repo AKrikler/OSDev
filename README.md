@@ -38,17 +38,29 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [x] VGA Text Mode Driver
     - [x] Printing
     - [x] GDT Setup
-    - [ ] Setup IDT & ISRs
-    - [ ] Remap PIC & IRQs
+    - [x] Setup IDT & ISRs
+    - [x] Remap PIC & IRQs
+	- [ ] Setup PIT
+	- [ ] Keyboard Driver
+	- [ ] Multiboot Information Parsing 
 - [ ] Memory Management
-    - [ ] TBD
+    - [ ] Setup PMM
+	- [ ] Setup VMM (Paging)
+	- [ ] Kernel Heap
 - [ ] Multitasking & Scheduling
-    - [ ] TBD
+    - [ ] Setup TSS
+	- [ ] Context Switching
+	- [ ] Round Robin Scheduler
 - [ ] Virtual File System (VFS) & Storage
-    - [ ] TBD
+    - [ ] VFS Abstraction Layer
+	- [ ] IDE/ATA Disk Driver
+	- [ ] FAT32 Implementation (Or initrd)
 - [ ] User Mode & System Calls
-    - [ ] TBD
+    - [ ] Ring 3 Transition
+	- [ ] Syscall Interface
 - [ ] Userspace & Applications
-    - [ ] TBD
+    - [ ] Finish klibc
+	- [ ] Basic Shell
+	- [ ] User Application
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
