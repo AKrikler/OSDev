@@ -1,55 +1,47 @@
-#include <klibc/stdio.h>
-#include <klibc/string.h>
-#include <klibc/assert.h>
-#include <klibc/stdint.h>
+#include <drivers/pit.h>
+#include <drivers/cmos.h>
+#include <drivers/vga.h>
 #include <arch/i386/gdt.h>
-#include <drivers/vga.h>1
 #include <kernel/idt.h>
+#include <klibc/time.h>
+#include <klibc/unistd.h>
+#include <klibc/stdio.h>
 
-void test_klibc() {
-    kprintf("[TEST] Testing klibc string functions...\n");
-    
-    // Test strlen
-    assert(strlen("Hello") == 5);
-    
-    // Test memcmp and memset
-    uint8_t buf1[4] = {0xAA, 0xAA, 0xAA, 0xAA};
-    uint8_t buf2[4];
-    memset(buf2, 0xAA, 4);
-    assert(memcmp(buf1, buf2, 4) == 0);
-    
-    kprintf("[PASS] klibc basic string/mem tests passed.\n");
-}
-
-void test_exceptions() {
-    kprintf("[TEST] Triggering Software Interrupt (int 3)...\n");
-    // This should trigger isr_handler and print "Received Interrupt: 3"
-    __asm__ volatile("int $0x3"); 
-    kprintf("[PASS] Software interrupt handled.\n");
-}
-
-void kmain(void) {
-    vga_init();
-    kprintf("--- KriklerOS Diagnostic Boot ---\n");
-
-    // 1. Test GDT
+void kmain() 
+{
+	vga_init();
     gdt_init();
-    kprintf("[OK] GDT Initialized.\n");
+    idt_init();
+    pit_init(CLOCKS_PER_SEC);
 
-    // 2. Test IDT & PIC
-    idt_init(); // This includes pic_remap and sti
-    kprintf("[OK] IDT Initialized & Hardware Interrupts Enabled.\n");
+    kprintf("Timekeeping Tests\n");
+    kprintf("---------------------------------------\n");
 
-    // 3. Test klibc logic
-    test_klibc();
+    kprintf("\nTEST 1: Absolute Time (CMOS)\n");
+    struct tm now;
+    cmos_read_rtc(&now);
+    kprintf("Current UTC Time: %d:%d:%d, %d/%d/%d\n", now.hour, now.min, now.sec, now.mon, now.mday, now.year);
 
-    // 4. Test Exceptions
-    test_exceptions();
+    kprintf("\nTEST 2: Sleep & Uptime (PIT)\n");
+    kprintf("Testing msleep(2500)... (Should take 2.5s)\n");
+    time_t start_ms = get_uptime_ms();
+    msleep(2500);
+    time_t end_ms = get_uptime_ms();
+    kprintf("Actual time elapsed: %d ms\n", (time_t)difftime(end_ms, start_ms));
 
-    kprintf("\n[SYSTEM] Testing Hardware IRQs. Press any key...\n");
+    kprintf("\nTEST 3: time.h wrapper\n");
+    time_t t = time(NULL);
+    kprintf("Epoch Seconds (since 2000): %u\n", (uint32_t)t);
 
-    // Final Loop: Just wait for IRQs (Timer and Keyboard)
-    for(;;) {
-        __asm__ volatile("hlt"); 
+    kprintf("\nTEST 4: Live Counter");
+    kprintf("\nStarting live uptime counter\n");
+    while(1) {
+        kprintf("\rUptime: %d seconds", get_uptime_s());
+        sleep(1);
     }
+
+	for(;;)
+	{
+		__asm__ volatile("hlt");
+	}
 }
