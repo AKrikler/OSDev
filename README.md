@@ -4,8 +4,8 @@ A custom 32-bit operating system built from scratch for the x86 architecture.
 
 ## Project Architecture
 
-* **`common/`**: Platform-independent type definitions and shared headers.
-* **`src/arch/i386/`**: Hardware Abstraction Layer (HAL) including boot logic and GDT/IDT setups.
+* **`include/`**: Platform-independent type definitions and shared headers.
+* **`src/arch/i386/`**: Hardware Abstraction Layer (HAL) including boot logic and GDT setup.
 * **`src/kernel/`**: High-level kernel logic (Memory management, scheduling, etc.).
 * **`build/`**: Destination for compiled object files and the final bootable ISO.
 
