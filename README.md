@@ -40,7 +40,7 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [x] GDT Setup
     - [x] Setup IDT & ISRs
     - [x] Remap PIC & IRQs
-	- [ ] Setup PIT
+	- [x] Setup PIT & CMOS
 	- [ ] Keyboard Driver
 	- [ ] Multiboot Information Parsing 
 - [ ] Memory Management
