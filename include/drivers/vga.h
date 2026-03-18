@@ -58,12 +58,6 @@ void vga_putc(unsigned char c);
 void vga_puts(const char* s);
 
 /**
- * @brief Driver-level formatted print. 
- * @note Usually kprintf is preferred over this in kernel code.
- */
-void vga_printf(const char* fmt, ...);
-
-/**
  * @brief Sets the foreground and background colors for subsequent output.
  * @param fg Foreground color.
  * @param bg Background color.

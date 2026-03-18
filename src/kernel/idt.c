@@ -2,6 +2,7 @@
 #include <klibc/stdio.h>
 #include <klibc/string.h>
 #include <drivers/pit.h>
+#include <drivers/keyboard.h>
 #include <arch/i386/io.h>
 
 #define PIC1_COMMAND 0x20
@@ -24,8 +25,6 @@
 #define PIC_EOI 0x20
 
 #define PIC_MASK_ALL_ENABLED  0x00
-
-#define KBD_DATA_PORT 0x60
 
 extern void idt_flush(uint32_t);
 
@@ -60,22 +59,22 @@ void isr_handler(registers_t* regs)
 
 void irq_handler(registers_t* regs)
 {
-    if (regs->int_no >= 40)
-	{
-        outb(PIC2_COMMAND, PIC_EOI);
+    switch (regs->int_no)
+    {
+        case 32:
+            pit_handler(regs);
+            break;
+        case 33:
+            keyboard_handler(regs);
+            break;
+        default:
+            kprintf("Unhandled IRQ: %d\n", regs->int_no);
+            break;
     }
-    outb(PIC1_COMMAND, PIC_EOI);
-    if (regs->int_no == 33)
-	{
-        kprintf("Keyboard press detected\n");
-        inb(KBD_DATA_PORT); 
-    }
-	if (regs->int_no == 32)
-	{
-		pit_handler(regs);
-    }
-}
 
+    if (regs->int_no >= 40) outb(PIC2_COMMAND, PIC_EOI);
+    outb(PIC1_COMMAND, PIC_EOI);
+}
 void pic_remap(void)
 {
     outb(PIC1_COMMAND, PIC_INIT_COMMAND);

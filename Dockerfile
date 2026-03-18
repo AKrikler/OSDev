@@ -1,6 +1,8 @@
-FROM ubuntu:latest
+FROM debian:bookworm-slim
 
-RUN apt-get update && apt-get install -y \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     binutils \
     nasm \
@@ -8,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     xorriso \
     grub-pc-bin \
     grub-common \
+    mtools \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/env

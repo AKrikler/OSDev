@@ -62,24 +62,24 @@ bool isxdigit(char c)
 
 char tolower(char c)
 {
-	if ('A' > c || c > 'Z')
+	if (!isupper(c))
 	{
 		return c;
 	}
 	else
 	{
-		return c + ('a' - 'A');
+		return c + 'a' - 'A';
 	}
 }
 
 char toupper(char c)
 {
-	if ('A' > c || c > 'z')
+	if (!islower(c))
 	{
 		return c;
 	}
 	else
 	{
-		return c - ('a' - 'A');
+		return c - 'a' - 'A';
 	}
 }

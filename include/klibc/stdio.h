@@ -52,4 +52,8 @@ int ksnprintf(char* buf, size_t n, const char* fmt, ...);
  */
 int ksprintf(char* buf, const char* fmt, ...);
 
+char kgetc(void);
+
+void kgets(char* buf, size_t size);
+
 #endif

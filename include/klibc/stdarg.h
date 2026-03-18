@@ -6,15 +6,14 @@
  * On x86_32, this is simply a pointer to the current position in the 
  * argument list on the stack.
  */
-typedef char* va_list;
+typedef __builtin_va_list va_list;
 
 /**
  * @brief Initialize a va_list to point to the first variadic argument.
  * @param ap   The va_list object to initialize.
  * @param last The name of the last fixed parameter before the '...' list.
  */
-#define va_start(ap, last) \
-    (ap = (va_list)&last + sizeof(last))
+#define va_start(ap, last) __builtin_va_start(ap, last)
 
 /**
  * @brief Retrieve the next argument in the list.
@@ -25,16 +24,13 @@ typedef char* va_list;
  * @param type The type of the argument to retrieve (e.g., int, char*).
  * @return     The value of the next argument cast to 'type'.
  */
-#define va_arg(ap, type) \
-    (*(type*)((ap += (sizeof(type) + 3) & ~3) - ((sizeof(type) + 3) & ~3)))
+#define va_arg(ap, type) __builtin_va_arg(ap, type)
 
 /**
  * @brief Clean up the va_list object after use.
  * @param ap The va_list object to finalize.
  */
-#define va_end(ap) \
-    (ap = (va_list)0)
-
+#define va_end(ap) __builtin_va_end(ap)
 /**
  * @brief Copy the state of one va_list to another.
  * Useful for passing the same set of variadic arguments to multiple 
@@ -42,7 +38,6 @@ typedef char* va_list;
  * @param dest The destination va_list.
  * @param src  The source va_list to copy from.
  */
-#define va_copy(dest, src) \
-    ((dest) = (src))
+#define va_copy(dest, src) __builtin_va_copy(dest, src)
 
 #endif

@@ -32,12 +32,14 @@ void vga_scroll(void)
     {
         vga_buffer[i] = vga_buffer[i + VGA_WIDTH];
     }
+
     uint16_t blank = vga_entry(' ', vga_color);
     for (int i = (VGA_HEIGHT - 1) * VGA_WIDTH; i < VGA_HEIGHT * VGA_WIDTH; i++)
     {
         vga_buffer[i] = blank;
     }
-    vga_row =  VGA_HEIGHT - 2;
+
+    vga_row = VGA_HEIGHT - 1; 
     vga_col = 0;
 }
 
@@ -115,65 +117,6 @@ static int itoa(int value, char* buf, int base)
     for (int j = i - 1; j >= 0; j--) buf[len++] = tmp[j];
     buf[len] = 0;
     return len;
-}
-
-void vga_printf(const char* fmt, ...)
-{
-    __builtin_va_list args;
-    __builtin_va_start(args, fmt);
-
-    while (*(fmt))
-    {
-        if (*fmt != '%')
-        {
-            vga_putc(*(fmt++));
-            continue;
-        }
-        
-        switch (*++fmt)
-        {   
-            case 'd':
-            {
-                int i = __builtin_va_arg(args, int);
-                char buf[32];
-                itoa(i, buf, 10);
-                vga_puts(buf);
-                break;
-            }
-            case 'x':
-            {
-                int x = __builtin_va_arg(args, int);
-                char buf[32];
-                itoa(x, buf, 16);
-                vga_puts(buf);
-                break;
-            }
-            case 's':
-            {
-                const char* s = __builtin_va_arg(args, char*);
-                vga_puts(s);
-                break;
-            }
-            case 'c':
-            {
-                vga_putc((char)__builtin_va_arg(args, int));
-                break;
-            }
-            case '%':
-            {
-                vga_putc('%');
-                break;
-            }
-            default:
-            {
-                vga_putc('%');
-                vga_putc(*fmt);
-                break;
-            }
-        }
-        fmt++;
-    }
-    __builtin_va_end(args);
 }
 
 void vga_set_color(vga_color_t fg, vga_color_t bg) { vga_color = (uint8_t)fg | (uint8_t)bg << 4; }

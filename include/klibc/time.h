@@ -34,4 +34,6 @@ double difftime(time_t end, time_t beginning);
 /* Returns the current calendar time as a time_t object */
 time_t time(time_t* timer);
 
+void print_date(void);
+
 #endif

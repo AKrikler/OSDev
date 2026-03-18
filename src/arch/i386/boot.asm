@@ -18,6 +18,8 @@ _start:
     mov esp, stack_top
     push 0
     popf
+	push ebx
+	push eax
     call kmain
     cli
 .hang:

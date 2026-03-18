@@ -31,7 +31,7 @@ docker run --rm -v "$(pwd):/root/env" osdev-env make
 qemu-system-i386 -cdrom build/osdev.iso
 ```
 ## Roadmap
-- [ ] Hardware Setup
+- [x] Hardware Setup
     - [x] Project & Docker Setup
     - [x] Bootloader, Linker & Kernel Handover
     - [x] Bash Scripts
@@ -41,8 +41,8 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [x] Setup IDT & ISRs
     - [x] Remap PIC & IRQs
 	- [x] Setup PIT & CMOS
-	- [ ] Keyboard Driver
-	- [ ] Multiboot Information Parsing 
+	- [x] Keyboard Driver
+	- [x] Multiboot Information Parsing 
 - [ ] Memory Management
     - [ ] Setup PMM
 	- [ ] Setup VMM (Paging)
@@ -62,5 +62,6 @@ qemu-system-i386 -cdrom build/osdev.iso
     - [ ] Finish klibc
 	- [ ] Basic Shell
 	- [ ] User Application
+	
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
